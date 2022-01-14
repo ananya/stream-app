@@ -1,11 +1,13 @@
 import { withRouter } from 'next/router'
-import React from "react";
+import React, {useEffect, useRouter} from "react";
 import VideoJS from '../../components/VideoJS';
 
 
 function Page({ router }) {
   const { pid } = router.query
   const playbackId = pid;
+  console.log(playbackId)
+  console.log(`https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`)
 
 
   const playerRef = React.useRef(null);
@@ -19,6 +21,7 @@ function Page({ router }) {
       src: `https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`
     }]
   }
+  
 
   const handlePlayerReady = (player) => {
     playerRef.current = player;
@@ -39,7 +42,9 @@ function Page({ router }) {
     <div className="relative bg-black h-56 lg:h-96 w-full xl:w-3/5 overflow-hidden">
       <div data-vjs-player>
 
-      <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
+        {playbackId ?   <VideoJS options={videoJsOptions} onReady={handlePlayerReady} /> : <div>Loading...</div>}
+
+    
 
 
       </div>
