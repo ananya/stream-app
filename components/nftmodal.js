@@ -39,6 +39,8 @@ class Nftmodal extends React.Component {
   }
 
   pinJSONToIPFS = (JSONBody) => {
+    const { onIPFSUpload } = this.props;
+    const { nftImageIFSCResponse } = this.state;
     const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`;
     return axios
     .post(url, JSONBody, {
@@ -48,6 +50,8 @@ class Nftmodal extends React.Component {
       }
     })
     .then(function (response) {
+
+      onIPFSUpload(response.data.IpfsHash, nftImageIFSCResponse);
       console.log(response);
         //handle response here
     })

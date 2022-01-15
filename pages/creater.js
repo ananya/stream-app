@@ -1,12 +1,17 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import { Button, Layout, Menu, Breadcrumb, Row, Col, Input } from 'antd';
+import { Button, Layout, Menu, Breadcrumb, Row, Col, Input, notification, Space, Card } from 'antd';
+import { EditOutlined, EllipsisOutlined, PlayCircleOutlined, CopyOutlined } from '@ant-design/icons';
+
 const { Header, Content, Footer } = Layout;
+const { Meta } = Card;
+
 import React from 'react'
 import axios from 'axios'
 
 import Nftmodal from '../components/nftmodal';
+import Item from 'antd/lib/list/Item';
 
 class Creater extends React.Component {
   constructor(props) {
@@ -14,8 +19,52 @@ class Creater extends React.Component {
     this.state = {
       modalVisible: false,
       createStreamResponse: null,
+      ipfsHash: null,
+      cardItems: [
+        {
+          ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
+          image: "QmTpSvBAhZLau1ssiBeDMgPoMHiDE7eJjshFEz2pyeAKDn",
+          ingest_url: "rtmp://rtmp.livepeer.com/live/",
+          stream_key: "3a8d-vq9q-dj24-tenr",
+          playback_url: "https://cdn.livepeer.com/hls/3a8dsveuy8dc3fxi/index.m3u8",
+          active: true
+        },
+        {
+          ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
+          image: "QmW93a1P5ADoUmjtjnCnrmuDHmKM9M9xEPFJbtG2hAVzSG",
+          ingest_url: "rtmp://rtmp.livepeer.com/live/",
+          stream_key: "3a8d-vq9q-dj24-tenr",
+          playback_url: "https://cdn.livepeer.com/hls/3a8dsveuy8dc3fxi/index.m3u8",
+          active: true
+        },
+        {
+          ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
+          image: "QmW93a1P5ADoUmjtjnCnrmuDHmKM9M9xEPFJbtG2hAVzSG",
+          ingest_url: "rtmp://rtmp.livepeer.com/live/",
+          stream_key: "3a8d-vq9q-dj24-tenr",
+          playback_url: "https://cdn.livepeer.com/hls/3a8dsveuy8dc3fxi/index.m3u8",
+          active: true
+        },
+        {
+          ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
+          image: "QmW93a1P5ADoUmjtjnCnrmuDHmKM9M9xEPFJbtG2hAVzSG",
+          ingest_url: "rtmp://rtmp.livepeer.com/live/",
+          stream_key: "3a8d-vq9q-dj24-tenr",
+          playback_url: "https://cdn.livepeer.com/hls/3a8dsveuy8dc3fxi/index.m3u8",
+          active: true
+        },
+        {
+          ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
+          image: "QmW93a1P5ADoUmjtjnCnrmuDHmKM9M9xEPFJbtG2hAVzSG",
+          ingest_url: "rtmp://rtmp.livepeer.com/live/",
+          stream_key: "3a8d-vq9q-dj24-tenr",
+          playback_url: "https://cdn.livepeer.com/hls/3a8dsveuy8dc3fxi/index.m3u8",
+          active: true
+        },
+      ],
     }
   }
+
 
   createStream = async () => {
     console.log("NEXT_PUBLIC_LIVEPEER_API_KEY", process.env.NEXT_PUBLIC_LIVEPEER_API_KEY)
@@ -92,7 +141,36 @@ class Creater extends React.Component {
     }
   }
 
+
+  openNotificationWithIcon = type => {
+    notification[type]({
+      message: 'Livestream created',
+      description:
+        `Successfully created livestream view at ${this.ipfsHash}.`,
+    });
+  };
+
+  onIPFSUpload = (ipfsHash, nftImage) => {
+    const { createStreamResponse } = this.state;
+    console.log({ ipfsHash, nftImage });
+    const { cardItems } = this.state;
+    cardItems.unshift({
+      ipfsHash: ipfsHash,
+      image: nftImage,
+      ingest_url: "rtmp://rtmp.livepeer.com/live/",
+      stream_key: createStreamResponse.data.streamKey,
+      playback_url: `https://cdn.livepeer.com/hls/${createStreamResponse.data.playbackId}/index.m3u8`,
+      active: true
+    })
+    this.setState({
+      ipfsHash,
+      cardItems
+    })
+    this.openNotificationWithIcon('success')
+  }
+
   render() {
+    const { cardItems } = this.state;
     return (
       <>
         <Layout>
@@ -107,35 +185,65 @@ class Creater extends React.Component {
               <Breadcrumb.Item>List</Breadcrumb.Item>
               <Breadcrumb.Item>App</Breadcrumb.Item>
             </Breadcrumb> */}
-            <div className="site-layout-background" style={{ padding: 24, minHeight: 380 }}>
+            <div className="site-layout-background" style={{ padding: 24, minHeight: 780 }}>
               <Row>
                 <Col span={8}>
-                  <Button 
+                  <Button
                     type="primary"
                     onClick={this.createStream}
                   >
-                  Create Stream
+                    Create Stream
                   </Button>
                 </Col>
                 <Col span={8} offset={8}>
                   <Input.Group compact>
-                    <Input 
-                      style={{ width: 'calc(100% - 200px)' }} 
+                    <Input
+                      style={{ width: 'calc(100% - 200px)' }}
                       disabled
                       defaultValue="$100" />
                     <Button type="primary">Claim</Button>
                   </Input.Group>
                 </Col>
               </Row>
+              <br />
+              <Row>
+                {cardItems.map((item, index) => {
+                  return (
+                    <Col span={5} key={index} offset={1}>
+                      <Card
+                        hoverable
+                        style={{ width: 300 }}
+                        cover={<img alt="example" src={`https://ipfs.io/ipfs/${item.image}`} />}
+                        actions={[
+                          <a href={`/play/${item.ipfsHash}`} > <PlayCircleOutlined key="play" /> </a>,
+                          <CopyOutlined key="copy" />,
+                        ]}
+                      >
+                        <Meta title="Live Stream" description={
+                          <div>
+                            ingest url: {item.ingest_url}.
+                            <br />
+                            stream key: {item.stream_key}.
+                            <br />
+                            playback_url: {item.playback_url}
+                          </div>} />
+                      </Card>
+                      <br />
+
+                    </Col>
+                  )
+                })}
+              </Row>
             </div>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+          {/* <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer> */}
         </Layout>
 
         {this.state.createStreamResponse && this.state.createStreamResponse.data && (
           <Nftmodal
             visible={this.state.modalVisible}
             onClose={() => this.setState({ modalVisible: false })}
+            onIPFSUpload={this.onIPFSUpload}
             stream={this.state.createStreamResponse.data}
           />
         )}
