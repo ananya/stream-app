@@ -378,7 +378,7 @@ class Player extends React.Component {
                     type="primary"
                     size="large"
                     block
-                  // onClick={this.mintNFTPort}
+                  onClick={this.mintNFTPort}
                   >Mint NFT without Gas</Button>
                 </Popover>
                 <br />
