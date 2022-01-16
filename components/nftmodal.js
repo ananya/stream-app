@@ -51,7 +51,7 @@ class Nftmodal extends React.Component {
     })
     .then(function (response) {
 
-      onIPFSUpload(response.data.IpfsHash, nftImageIFSCResponse);
+      onIPFSUpload(response.data.IpfsHash, nftImageIFSCResponse, JSONBody);
       console.log(response);
         //handle response here
     })
@@ -63,7 +63,7 @@ class Nftmodal extends React.Component {
 
   onFinish = (values) => {
     const { nftImageIFSCResponse } = this.state;
-    const { stream } = this.props;
+    const { stream, streamerAddress } = this.props;
     console.log("nftImageIFSCResponse", nftImageIFSCResponse);
     console.log('Received values of form: ', values);
 
@@ -71,12 +71,14 @@ class Nftmodal extends React.Component {
       ingest_url: "rtmp://rtmp.livepeer.com/live/",
       stream_key: stream.streamKey,
       playback_url: `https://cdn.livepeer.com/hls/${stream.playbackId}/index.m3u8`,
-      select_sponsers: values.select_sponsers,
+      stream_name: values.stream_name,
       nft_image: `https://ipfs.io/ipfs/${nftImageIFSCResponse}`,
       nft_name: values.nft_name,
       nft_description: values.nft_description,
       nft_symbol: values.nft_symbol,
+      streamer_address: streamerAddress
     }
+
     this.pinJSONToIPFS(streamCreateData);
     this.onModalClose();
   };
@@ -171,15 +173,10 @@ class Nftmodal extends React.Component {
               </Form.Item>
 
               <Form.Item
-                name="select_sponsers"
-                label="Select sponsers"
-                // rules={[{ required: true, message: 'Please select atleast your sponsers', type: 'array' }]}
+                name="stream_name"
+                label="Stream Name"
               >
-                <Select mode="multiple" placeholder="Please select sponsers">
-                  <Option value="Crypto-Kitties">Crypto Kitties</Option>
-                  <Option value="The-Sandbox">The Sandbox</Option>
-                  <Option value="Axie-Infinity">Axie Infinity</Option>
-                </Select>
+                <Input placeholder='Please enter stream name'/>
               </Form.Item>
 
               <Form.Item name="switch" label="Reward NFT" valuePropName="checked">

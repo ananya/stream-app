@@ -1,8 +1,9 @@
 
-import { Button, Layout, Menu, Breadcrumb, Row, Col, Input, notification, Space, Card } from 'antd';
+import { Button, Layout, Menu, Breadcrumb, Row, Col, Input, notification, Space, Card, Typography } from 'antd';
 import { EditOutlined, EllipsisOutlined, PlayCircleOutlined, CopyOutlined } from '@ant-design/icons';
 
 const { Header, Content, Footer } = Layout;
+const { Title, Text, Link } = Typography;
 const { Meta } = Card;
 
 import React from 'react'
@@ -17,6 +18,7 @@ class Creater extends React.Component {
     super(props);
     console.log("address", this.props.address);
     this.state = {
+      newStreamFormBody: null,
       loadMintNFTComponent: false,
       modalVisible: false,
       createStreamResponse: null,
@@ -24,6 +26,7 @@ class Creater extends React.Component {
       address: null,
       cardItems: [
         {
+          stream_name: "Stream Name",
           ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
           nft_image: "https://ipfs.io/ipfs/QmdvCgGPXc2XfDTvffxvGTYPQsD7J4THcTE1R5L66WStY3",
           ingest_url: "rtmp://rtmp.livepeer.com/live/",
@@ -32,6 +35,7 @@ class Creater extends React.Component {
           active: true
         },
         {
+          stream_name: "Stream Name",
           ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
           nft_image: "https://ipfs.io/ipfs/QmW93a1P5ADoUmjtjnCnrmuDHmKM9M9xEPFJbtG2hAVzSG",
           ingest_url: "rtmp://rtmp.livepeer.com/live/",
@@ -40,6 +44,7 @@ class Creater extends React.Component {
           active: true
         },
         {
+          stream_name: "Stream Name",
           ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
           nft_image: "https://ipfs.io/ipfs/QmW93a1P5ADoUmjtjnCnrmuDHmKM9M9xEPFJbtG2hAVzSG",
           ingest_url: "rtmp://rtmp.livepeer.com/live/",
@@ -48,6 +53,7 @@ class Creater extends React.Component {
           active: true
         },
         {
+          stream_name: "Stream Name",
           ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
           nft_image: "https://ipfs.io/ipfs/QmW93a1P5ADoUmjtjnCnrmuDHmKM9M9xEPFJbtG2hAVzSG",
           ingest_url: "rtmp://rtmp.livepeer.com/live/",
@@ -56,6 +62,7 @@ class Creater extends React.Component {
           active: true
         },
         {
+          stream_name: "Stream Name",
           ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
           nft_image: "https://ipfs.io/ipfs/QmW93a1P5ADoUmjtjnCnrmuDHmKM9M9xEPFJbtG2hAVzSG",
           ingest_url: "rtmp://rtmp.livepeer.com/live/",
@@ -224,21 +231,24 @@ class Creater extends React.Component {
     });
   };
 
-  onIPFSUpload = (ipfsHash, nftImage) => {
+  onIPFSUpload = (ipfsHash, nftImage, newStreamFormBody) => {
     const { createStreamResponse } = this.state;
-    console.log({ ipfsHash, nftImage });
+    console.log("ipfsHash", ipfsHash, "nftImage", nftImage, "newStreamFormBody", newStreamFormBody);
     const { cardItems } = this.state;
     cardItems.unshift({
-      ipfsHash: ipfsHash,
-      nft_image: nftImage,
+      stream_name: newStreamFormBody.stream_name,
+      ipfsHash: `https://ipfs.io/ipfs/${ipfsHash}`,
+      nft_image: `https://ipfs.io/ipfs/${nftImage}`,
       ingest_url: "rtmp://rtmp.livepeer.com/live/",
       stream_key: createStreamResponse.data.streamKey,
       playback_url: `https://cdn.livepeer.com/hls/${createStreamResponse.data.playbackId}/index.m3u8`,
-      active: true
+      active: true,
+      newly_added: true,
     })
     this.setState({
       ipfsHash,
-      cardItems
+      cardItems,
+      newStreamFormBody
     })
     this.openNotificationWithIcon('success')
   }
@@ -272,9 +282,7 @@ class Creater extends React.Component {
       <>
           <Layout>
             <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
-              <div className="logo">
-                <h1>Stream App</h1>
-              </div>
+              
             </Header>
             <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64 }}>
               {/* <Breadcrumb style={{ margin: '16px 0' }}>
@@ -282,14 +290,16 @@ class Creater extends React.Component {
                 <Breadcrumb.Item>List</Breadcrumb.Item>
                 <Breadcrumb.Item>App</Breadcrumb.Item>
               </Breadcrumb> */}
-              <div className="site-layout-background" style={{ padding: 24, minHeight: 780 }}>
+              <div className="" style={{ padding: 24, minHeight: 780 }}>
+
                 <Row>
                   <Col span={8}>
                     <Button
                       type="primary"
+                      size="large"
                       onClick={this.createStream}
                     >
-                      Create Stream
+                     👉 Start New Stream 
                     </Button>
                   </Col>
                   <Col span={8} offset={8}>
@@ -304,6 +314,8 @@ class Creater extends React.Component {
                   </Col>
                 </Row>
                 <br />
+            <Title level={1}>🍜 Streams you created</Title>
+
                 <Row>
                   {cardItems.map((item, index) => {
                     return (
@@ -313,19 +325,22 @@ class Creater extends React.Component {
                           style={{ width: 300 }}
                           cover={<img alt="example" src={`${item.nft_image}`} />}
                           actions={[
-                            <a href={`/play/${item.ipfsHash}`} > <PlayCircleOutlined key="play" /> </a>,
-                            <Mintnft address={address} ipfsHash={item.ipfsHash} />
+                            <a target="_blank" href={`/play/${item.ipfsHash.substring(21)}`} > <Button key="play" > Goto Stream </Button> </a>,
+                            item.newly_added && <Mintnft address={address} ipfsHash={item.ipfsHash} /> 
                           ]}
                         >
-                          <Meta title="Live Stream" description={
-                            <div>
-                              {item.nft_image}
-                              ingest url: {item.ingest_url}.
-                              <br />
-                              stream key: {item.stream_key}.
-                              <br />
-                              playback_url: {item.playback_url}
-                            </div>} />
+                          <Meta title={item.stream_name} description={item.newly_added &&
+                            (
+                              <div>
+                                ingest url: {item.ingest_url}.
+                                <br />
+                                stream key: {item.stream_key}.
+                                <br />
+                                playback_url: {item.playback_url} 
+                              </div>
+                            )
+                              }
+                             />
                         </Card>
                         <br />
 
@@ -333,6 +348,26 @@ class Creater extends React.Component {
                     )
                   })}
                 </Row>
+
+            {/* <Title level={1}>👏 Streams you were part of</Title>
+            <Row>
+                  {cardItems.map((item, index) => {
+                    return (
+                      <Col span={3} key={index} offset={1}>
+                        <Card
+                          hoverable
+                          style={{ width: 200 }}
+                          cover={<img alt="example" style={{padding:"10px"}} src={`${item.nft_image}`} />}
+                        >
+                          <Meta title="Live Stream" description="You were part of this live stream"/>
+                        </Card>
+                        <br />
+
+                      </Col>
+                    )
+                  })}
+                </Row> */}
+
               </div>
             </Content>
             {/* <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer> */}
@@ -345,6 +380,7 @@ class Creater extends React.Component {
             onClose={() => this.setState({ modalVisible: false })}
             onIPFSUpload={this.onIPFSUpload}
             stream={createStreamResponse.data}
+            streamerAddress={this.props.address}
           />
         )}
       </>

@@ -8,6 +8,14 @@ class Mintnft extends React.Component {
     super(props);
   }
 
+  openNotificationWithIcon = (type, tx) => {
+    notification[type]({
+      message: 'Livestream created',
+      description:
+        `NFT minted successfully ${tx}`,
+    });
+  };
+
   mintNFTStreamer = async () => {
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -27,16 +35,18 @@ class Mintnft extends React.Component {
 
     const  gasLimit = await StreamerNFTContract.estimateGas.awardItem(
       address,
-      ipfsUrl
+      `ipfs://${ipfsUrl}`
     )
 
     const tx =  await StreamerNFTContract.awardItem(
       address,
-      ipfsUrl,
+      `ipfs://${ipfsUrl}`,
       {
         gasLimit
       }
     )
+    this.openNotificationWithIcon('success', tx.hash)
+
   }
 
 

@@ -3,7 +3,11 @@ import axios from 'axios';
 import { ethers } from "ethers";
 import { Framework } from "@superfluid-finance/sdk-core";
 
-import { Row, Col, Card, Meta, Skeleton, Image, Button, Input, Popover } from 'antd';
+import { Layout, Row, Col, Card, Meta, Skeleton, Image, Button, Input, Popover, Typography, Space } from 'antd';
+
+
+const { Header, Footer, Sider, Content } = Layout;
+const { Title, Text, Link } = Typography;
 import VideoJS from '../../components/VideoJS';
 
 
@@ -18,12 +22,16 @@ class Player extends React.Component {
       nft_image: null,
       nft_name: null,
       nft_symbol: null,
+      stream_name: null,
       playback_url: null,
       stream_key: null,
       isLoading: true,
       address: null,
       inputAddress: null,
-      NFTMintingAddress: null
+      NFTMintingAddress: null,
+      streamer_address: null,
+      minter_avatar_url: null,
+      generated_nft_url: null,
     }
   }
 
@@ -43,6 +51,8 @@ class Player extends React.Component {
       nft_symbol: ipfsResponse.nft_symbol,
       playback_url: ipfsResponse.playback_url,
       stream_key: ipfsResponse.stream_key,
+      stream_name: ipfsResponse.stream_name,
+      streamer_address: ipfsResponse.streamer_address,
       isLoading: false
     })
   }
@@ -99,6 +109,19 @@ class Player extends React.Component {
     })
   }
 
+  getGeneratedNFTImage = async () => {
+    const { NFTMintingAddress, nft_image, stream_name, streamer_address, minter_avatar_url } = this.state;
+    console.log(NFTMintingAddress, nft_image, stream_name, streamer_address, minter_avatar_url)
+
+    const minterUrl = minter_avatar_url ? minter_avatar_url : "https://hack.ethglobal.com/static/nologo.png";
+
+    const url = `https://api.dynapictures.com/links/0d5d924457.png?params=image19---imageUrl___${nft_image}%3C%3Etext39---text___add%20a%20${encodeURIComponent(stream_name)}%3C%3Etext42---text___${streamer_address}%3C%3Etext44---text___${NFTMintingAddress}%3C%3Eimage41---imageUrl___https://hack.ethglobal.com/static/nologo.png%3C%3Eimage48---imageUrl___${minterUrl}&metadata=gowryl`
+    console.log("NFT image created at ", url)
+    this.setState({
+      generated_nft_url: url
+    })
+  }
+
   mintNFTPort = async () => {
     const {
       isLoading,
@@ -109,7 +132,9 @@ class Player extends React.Component {
       nft_symbol,
       playback_url,
       stream_key,
-      address
+      address,
+      streamer_address,
+      stream_name
     } = this.state;
 
     const options = {
@@ -141,13 +166,41 @@ class Player extends React.Component {
   onAddingAddress = async () => {
     const { inputAddress } = this.state;
     console.log(inputAddress, "inputAddress")
+    var minter_avatar_url = null;
     if (ethers.utils.isAddress(inputAddress)) {
       this.setMintAddress(inputAddress);
     } else {
       const provider = new ethers.providers.AlchemyProvider(null, process.env.NEXT_PUBLIC_ALCHEMY_API_KEY);
       const address = await provider.resolveName(inputAddress)
+
+      try {
+        const resolver = await provider.getResolver(inputAddress);
+        const avatar = await resolver.getText("avatar")
+        const avatar_opensea = "https://api.opensea.io/api/v1/asset/" + avatar.split(":")[2]
+
+        const options = {
+          method: 'GET',
+          url: avatar_opensea,
+          params: { format: 'json' }
+        };
+
+        await axios.request(options).then(function (response) {
+          console.log(response.data.image_url, "is the avatar response from opensea api");
+          minter_avatar_url = response.data.image_url
+         
+        }).catch(function (error) {
+          console.error(error);
+        });
+      } catch (e) {
+        console.log("err getting avatar")
+      }
+      this.setState({minter_avatar_url: minter_avatar_url})
+
       this.setMintAddress(address);
+      
+
     }
+    await this.getGeneratedNFTImage()
   }
 
 
@@ -159,7 +212,7 @@ class Player extends React.Component {
 
 
   createFlow = async () => {
-    const recipient = "0xc351F7a623972677Fc81A694AF92414c17Fc5816"
+    const recipient = this.state.streamer_address;
     const flowRate = "2000000000000"
     const metamaskProvider = new ethers.providers.Web3Provider(window.ethereum);
     const { address } = this.state;
@@ -221,7 +274,10 @@ class Player extends React.Component {
       playback_url,
       stream_key,
       address,
-      NFTMintingAddress
+      NFTMintingAddress,
+      stream_name,
+      streamer_address,
+      minter_avatar_url
     } = this.state;
 
 
@@ -245,76 +301,100 @@ class Player extends React.Component {
     }
 
     return (
-      <Row>
-        <Col span={18}>
-          <div className="relative bg-black h-56 lg:h-96 w-full xl:w-3/5 overflow-hidden">
-            <div data-vjs-player>
-              {playback_url ? <VideoJS options={videoJsOptions} onReady={this.handlePlayerReady} /> : <div>Loading...</div>}
-            </div>
-          </div>
-        </Col>
-        {/* {ipfsResponse} */}
+      <Layout>
+        <Header>Header</Header>
+        <Content style={{ padding: "40px" }}>
+          <Row>
+            <Col span={18}>
+              <div className="relative bg-black h-56 lg:h-96 w-full xl:w-3/5 overflow-hidden">
+                <div data-vjs-player>
+                  {playback_url ? (
+                    <>
+                      <VideoJS options={videoJsOptions} onReady={this.handlePlayerReady} />
+                      <br />
+                      <Title level={1}>{stream_name}</Title>
+                      <Title level={5}>By: {streamer_address}</Title>
 
-        {!isLoading ? (
-          <Col span={4} offset={1}>
-            <br />
-            <Image
-              width={250}
-              src={nft_image}
-            />
-
-            <div>
-              nft name: {nft_name}.
-              <br />
-              nft description: {nft_description}.
-              <br />
-              nft symbol: {nft_symbol}
-            </div>
-            <br />
-            {address ?
-              <Button onClick={this.setConnectedWalletAddressAsMintAddress} type="primary" size="large" block ghost>Select {address.substring(0, 7)} </Button> :
-              <div>
-                <Button onClick={this.connectWallet} type="primary" size="large" block>Connect Wallet</Button>
-
+                    </>
+                  ) : <div>Loading...</div>}
+                </div>
               </div>
+            </Col>
+            {/* {ipfsResponse} */}
 
-            }
+            {!isLoading ? (
+              <Col span={4} offset={1}>
+                <Image
+                  width={250}
+                  src={nft_image}
+                />
 
-            <br />
-            <br />
-            or
-            <br />
+                <div>
 
-            <Input.Group compact>
-              <Input style={{ width: 'calc(100% - 80px)' }} placeholder="Enter address or ens" name="address" onChange={this.handleInputChange} />
-              <Button type="primary" onClick={this.onAddingAddress}>Submit</Button>
-            </Input.Group>
-            <br />
-            <br />
-            <div>
-              Mint NFT at {NFTMintingAddress ? NFTMintingAddress.substring(0, 7) : "address"}
-            </div>
-            <Popover content="Minting without gas in Polygon Network using NFTPort." title="Gasless NFT Minting">
-              <Button
-                type="primary"
-                size="large"
-                block
-              // onClick={this.mintNFTPort}
-              >Mint NFT without Gas</Button>
-            </Popover>
-            <br />
-            <br />
-            <Popover content="Subscribe via Superfluid" title="Subscribe">
-              <Button
-                type="primary"
-                size="large"
-                block
-                onClick={this.createFlow}
-              >Subscribe 5 DAI / Month</Button>
-            </Popover>
-          </Col>
-        ) : <div>Loading NFT</div>}
-      </Row>
+                  <Text strong>{nft_name}  </Text> <Text mark>{nft_symbol}</Text>
+                  <br />
+                  <Text type="secondary">{nft_description}</Text>
+                  <br />
+                </div>
+                <br />
+                {address ?
+                  <Button onClick={this.setConnectedWalletAddressAsMintAddress} type="primary" size="large" block ghost>Select {address.substring(0, 7)} </Button> :
+                  <div>
+                    <Button onClick={this.connectWallet} type="primary" size="large" block>Connect Wallet</Button>
+
+                  </div>
+
+                }
+
+                <br />
+                <Space direction="horizontal" style={{ width: '100%', justifyContent: 'center' }}>
+
+                  or
+                </Space>
+                <br />
+
+                <Input.Group compact>
+                  <Input style={{ width: 'calc(100% - 80px)' }} placeholder="Enter address or ens" name="address" onChange={this.handleInputChange} />
+                  <Button type="primary" onClick={this.onAddingAddress}>Submit</Button>
+                </Input.Group>
+                <br />
+                <br />
+                <div>
+                  <Space direction="horizontal" style={{ width: '100%', justifyContent: 'center', padding: "5px" }}>
+                    <Text strong>
+                      <Image
+                      src={minter_avatar_url}
+                      />
+
+                      {NFTMintingAddress ? `Mint NFT at  ${NFTMintingAddress.substring(0, 7)}` : "Select address to mint NFT"}
+                    </Text>
+
+                  </Space>
+                </div>
+                <Popover content="Minting without gas in Polygon Network using NFTPort." title="Gasless NFT Minting">
+                  <Button
+                    type="primary"
+                    size="large"
+                    block
+                  // onClick={this.mintNFTPort}
+                  >Mint NFT without Gas</Button>
+                </Popover>
+                <br />
+                <br />
+                <Popover content="Subscribe via Superfluid" title="Subscribe">
+                  <Button
+                    type="primary"
+                    size="large"
+                    block
+                    onClick={this.createFlow}
+                  >Subscribe 5 DAI / Month</Button>
+                </Popover>
+              </Col>
+            ) : <div>Loading NFT</div>}
+          </Row>
+        </Content>
+
+      </Layout>
     )
   }
 }
