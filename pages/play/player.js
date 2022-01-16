@@ -115,7 +115,9 @@ class Player extends React.Component {
 
     const minterUrl = minter_avatar_url ? minter_avatar_url : "https://hack.ethglobal.com/static/nologo.png";
 
-    const url = `https://api.dynapictures.com/links/0d5d924457.png?params=image19---imageUrl___${nft_image}%3C%3Etext39---text___add%20a%20${encodeURIComponent(stream_name)}%3C%3Etext42---text___${streamer_address}%3C%3Etext44---text___${NFTMintingAddress}%3C%3Eimage41---imageUrl___https://hack.ethglobal.com/static/nologo.png%3C%3Eimage48---imageUrl___${minterUrl}&metadata=gowryl`
+
+    const url = `https://api.dynapictures.com/links/23b04aa2cd.png?params=image7---imageUrl___${nft_image}%3C%3Etext9---text___${encodeURIComponent(stream_name)}%3C%3Eimage10---imageUrl__https://hack.ethglobal.com/static/nologo.png%3C%3Eimage11---imageUrl__${minterUrl}%3C%3Etext14---text___${streamer_address}%3C%3Etext15---text___${NFTMintingAddress}&metadata=black`
+
     console.log("NFT image created at ", url)
     this.setState({
       generated_nft_url: url
