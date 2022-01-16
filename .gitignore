@@ -5,6 +5,9 @@
 /node_modules
 /.pnp
 .pnp.js
+.calva/
+.clj-kondo/
+.lsp/
 
 # testing
 /coverage
