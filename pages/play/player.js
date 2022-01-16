@@ -1,6 +1,7 @@
 import React from "react";
 import axios from 'axios';
 import { ethers } from "ethers";
+import { Framework } from "@superfluid-finance/sdk-core";
 
 import { Row, Col, Card, Meta, Skeleton, Image, Button, Input, Popover } from 'antd';
 import VideoJS from '../../components/VideoJS';
@@ -91,8 +92,8 @@ class Player extends React.Component {
     await this.setAddress();
   }
 
-  setConnectedWalletAddressAsMintAddress =  () => {
-    const { address }  = this.state;
+  setConnectedWalletAddressAsMintAddress = () => {
+    const { address } = this.state;
     this.setState({
       NFTMintingAddress: address
     })
@@ -155,6 +156,58 @@ class Player extends React.Component {
       inputAddress: e.target.value
     })
   }
+
+
+  createFlow = async () => {
+    const recipient = "0xc351F7a623972677Fc81A694AF92414c17Fc5816"
+    const flowRate = "2000000000000"
+    const metamaskProvider = new ethers.providers.Web3Provider(window.ethereum);
+    const { address } = this.state;
+
+
+    const sf = await Framework.create({
+      networkName: "kovan",
+      provider: metamaskProvider
+    });
+
+    const signer = sf.createSigner({
+      web3Provider: metamaskProvider
+    });
+
+    const DAIx = "0xe3cb950cb164a31c66e32c320a800d477019dcff";
+
+    try {
+      const createFlowOperation = sf.cfaV1.createFlow({
+        sender: address,
+        receiver: recipient,
+        flowRate: flowRate,
+        superToken: DAIx
+        // userData?: string
+      });
+
+      console.log("Creating your stream...");
+
+      const result = await createFlowOperation.exec(signer);
+      console.log(result);
+
+      console.log(
+        `Congrats - you've just created a money stream!
+      View Your Stream At: https://app.superfluid.finance/dashboard/${recipient}
+      Network: Kovan
+      Super Token: DAIx
+      Sender: ${address},
+      Receiver: ${recipient},
+      FlowRate: ${flowRate}
+      `
+      );
+    } catch (error) {
+      console.log(
+        "Hmmm, your transaction threw an error. Make sure that this stream does not already exist, and that you've entered a valid Ethereum address!"
+      );
+      console.error(error);
+    }
+  }
+
 
   render() {
     const { pid } = this.props;
@@ -248,6 +301,16 @@ class Player extends React.Component {
                 block
               // onClick={this.mintNFTPort}
               >Mint NFT without Gas</Button>
+            </Popover>
+            <br />
+            <br />
+            <Popover content="Subscribe via Superfluid" title="Subscribe">
+              <Button
+                type="primary"
+                size="large"
+                block
+                onClick={this.createFlow}
+              >Subscribe 5 DAI / Month</Button>
             </Popover>
           </Col>
         ) : <div>Loading NFT</div>}
