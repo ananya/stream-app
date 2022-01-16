@@ -21,7 +21,7 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
-          <a href="/user/0xc351f7a623972677fc81a694af92414c17fc5816" className={styles.card}>
+          <a href="/user/0x1da502D83c2967cD185E9179376F1edA3DC52922" className={styles.card}>
             <h2>👏 Start Streaming &rarr;</h2>
             <p>Create a Stream using Livepeer via OBS. Create an NFT for streams w/ data stored via Pinata (IPFS).</p>
           </a>

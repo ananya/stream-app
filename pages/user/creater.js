@@ -25,51 +25,51 @@ class Creater extends React.Component {
       ipfsHash: null,
       address: null,
       cardItems: [
-        {
-          stream_name: "Stream Name",
-          ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
-          nft_image: "https://ipfs.io/ipfs/QmdvCgGPXc2XfDTvffxvGTYPQsD7J4THcTE1R5L66WStY3",
-          ingest_url: "rtmp://rtmp.livepeer.com/live/",
-          stream_key: "3a8d-vq9q-dj24-tenr",
-          playback_url: "https://cdn.livepeer.com/hls/3a8dsveuy8dc3fxi/index.m3u8",
-          active: true
-        },
-        {
-          stream_name: "Stream Name",
-          ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
-          nft_image: "https://ipfs.io/ipfs/QmW93a1P5ADoUmjtjnCnrmuDHmKM9M9xEPFJbtG2hAVzSG",
-          ingest_url: "rtmp://rtmp.livepeer.com/live/",
-          stream_key: "3a8d-vq9q-dj24-tenr",
-          playback_url: "https://cdn.livepeer.com/hls/3a8dsveuy8dc3fxi/index.m3u8",
-          active: true
-        },
-        {
-          stream_name: "Stream Name",
-          ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
-          nft_image: "https://ipfs.io/ipfs/QmW93a1P5ADoUmjtjnCnrmuDHmKM9M9xEPFJbtG2hAVzSG",
-          ingest_url: "rtmp://rtmp.livepeer.com/live/",
-          stream_key: "3a8d-vq9q-dj24-tenr",
-          playback_url: "https://cdn.livepeer.com/hls/3a8dsveuy8dc3fxi/index.m3u8",
-          active: true
-        },
-        {
-          stream_name: "Stream Name",
-          ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
-          nft_image: "https://ipfs.io/ipfs/QmW93a1P5ADoUmjtjnCnrmuDHmKM9M9xEPFJbtG2hAVzSG",
-          ingest_url: "rtmp://rtmp.livepeer.com/live/",
-          stream_key: "3a8d-vq9q-dj24-tenr",
-          playback_url: "https://cdn.livepeer.com/hls/3a8dsveuy8dc3fxi/index.m3u8",
-          active: true
-        },
-        {
-          stream_name: "Stream Name",
-          ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
-          nft_image: "https://ipfs.io/ipfs/QmW93a1P5ADoUmjtjnCnrmuDHmKM9M9xEPFJbtG2hAVzSG",
-          ingest_url: "rtmp://rtmp.livepeer.com/live/",
-          stream_key: "3a8d-vq9q-dj24-tenr",
-          playback_url: "https://cdn.livepeer.com/hls/3a8dsveuy8dc3fxi/index.m3u8",
-          active: true
-        },
+        // {
+        //   stream_name: "Stream Name",
+        //   ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
+        //   nft_image: "https://ipfs.io/ipfs/QmdvCgGPXc2XfDTvffxvGTYPQsD7J4THcTE1R5L66WStY3",
+        //   ingest_url: "rtmp://rtmp.livepeer.com/live/",
+        //   stream_key: "3a8d-vq9q-dj24-tenr",
+        //   playback_url: "https://cdn.livepeer.com/hls/3a8dsveuy8dc3fxi/index.m3u8",
+        //   active: true
+        // },
+        // {
+        //   stream_name: "Stream Name",
+        //   ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
+        //   nft_image: "https://ipfs.io/ipfs/QmW93a1P5ADoUmjtjnCnrmuDHmKM9M9xEPFJbtG2hAVzSG",
+        //   ingest_url: "rtmp://rtmp.livepeer.com/live/",
+        //   stream_key: "3a8d-vq9q-dj24-tenr",
+        //   playback_url: "https://cdn.livepeer.com/hls/3a8dsveuy8dc3fxi/index.m3u8",
+        //   active: true
+        // },
+        // {
+        //   stream_name: "Stream Name",
+        //   ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
+        //   nft_image: "https://ipfs.io/ipfs/QmW93a1P5ADoUmjtjnCnrmuDHmKM9M9xEPFJbtG2hAVzSG",
+        //   ingest_url: "rtmp://rtmp.livepeer.com/live/",
+        //   stream_key: "3a8d-vq9q-dj24-tenr",
+        //   playback_url: "https://cdn.livepeer.com/hls/3a8dsveuy8dc3fxi/index.m3u8",
+        //   active: true
+        // },
+        // {
+        //   stream_name: "Stream Name",
+        //   ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
+        //   nft_image: "https://ipfs.io/ipfs/QmW93a1P5ADoUmjtjnCnrmuDHmKM9M9xEPFJbtG2hAVzSG",
+        //   ingest_url: "rtmp://rtmp.livepeer.com/live/",
+        //   stream_key: "3a8d-vq9q-dj24-tenr",
+        //   playback_url: "https://cdn.livepeer.com/hls/3a8dsveuy8dc3fxi/index.m3u8",
+        //   active: true
+        // },
+        // {
+        //   stream_name: "Stream Name",
+        //   ipfsHash: "QmSFD715swS5AqTxU1nJBHZisxtuSD18ygRE4ix9UBbjiU",
+        //   nft_image: "https://ipfs.io/ipfs/QmW93a1P5ADoUmjtjnCnrmuDHmKM9M9xEPFJbtG2hAVzSG",
+        //   ingest_url: "rtmp://rtmp.livepeer.com/live/",
+        //   stream_key: "3a8d-vq9q-dj24-tenr",
+        //   playback_url: "https://cdn.livepeer.com/hls/3a8dsveuy8dc3fxi/index.m3u8",
+        //   active: true
+        // },
       ],
     }
   }
@@ -81,9 +81,9 @@ class Creater extends React.Component {
 
   getData = async () => {
     console.log("getData");
-    const NETWORK_URL = 42 // kovan
+    const NETWORK_URL = 42 // Kovan
     const address = this.props.address
-    const NFT_NAME = "Streaming"
+    const NFT_NAME = "STMR"
 
     const options = {
       method: 'GET',
@@ -105,7 +105,8 @@ class Creater extends React.Component {
     if (data) {
 
       data.data.items.forEach(element => {
-        if (element.contract_name === NFT_NAME && element.nft_data) {
+        console.log(element.contract_ticker_symbol, element.nft_data)
+        if (element.contract_ticker_symbol === NFT_NAME && element.nft_data) {
           element.nft_data.forEach(nft => {
             console.log("nft tokenurl", nft.token_url)
             const resp = axios.get(nft.token_url)
@@ -326,7 +327,7 @@ class Creater extends React.Component {
                           cover={<img alt="example" src={`${item.nft_image}`} />}
                           actions={[
                             <a target="_blank" href={`/play/${item.ipfsHash.substring(21)}`} > <Button key="play" > Goto Stream </Button> </a>,
-                            item.newly_added && <Mintnft address={address} ipfsHash={item.ipfsHash} /> 
+                            item.newly_added && <Mintnft address={address} ipfsHash={item.ipfsHash.substring(21)} /> 
                           ]}
                         >
                           <Meta title={item.stream_name} description={item.newly_added &&
